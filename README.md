@@ -43,6 +43,46 @@ os.environ['JAVA_HOME'] = '/usr/lib/jvm/default'
 You can view `src/main/python/tests/minie/Demo.py` for an example to 
 how to get extracted triples. I am planning on implementing a python package that provides a sufficiently good wrapper. For the moment, make sure that your `os.environ['CLASSPATH']` variable points to the minie jar file relative to where you will run your script from (or even better provide an absolute path).
 
+## Python bindings (Experimental and incomplete)
+
+To install the python bindings switch to `src/main/python/`:
+
+`$ cd src/main/python`
+
+And run:
+
+`$ python3 setup.py build`
+
+And install:
+`$ python3 setup.py install -u`
+
+Then you can write a script like the following:
+
+```
+from miniepy import *
+jar_file = "path/to/minie.jar"
+
+# Instantiate minie
+minie = MinIE(jar_file)
+
+# Sentence to extract triples from
+sentence = "The Joker believes that the hero Batman was not actually born in foggy Gotham City."
+
+# Get proposition triples
+triples = [p.triple for p in minie.get_propositions(sentence)]
+
+print("Original sentence:")
+print('\t{}'.format(sentence))
+
+print("Extracted triples:")
+for t in triples:
+    print("\t{}".format(t))
+	
+```
+
+*NOTE:* Bindings are incomplete, I will be adding functionality when I need it.
+
+
 # MinIE - Open Information Extraction system
 
 An Open Information Extraction system, providing useful extractions:
