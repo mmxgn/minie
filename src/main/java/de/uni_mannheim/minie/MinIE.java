@@ -69,12 +69,23 @@ public class MinIE {
     }
     
     /** MinIE mode **/
+    /** Originally this was a public enum, in order for it to work
+        with pyjnius however (which has buggy enum reflection) we 
+        replace it with the following integer values:
+        AGGRESSIVE = 0
+        DICTIONARY = 1
+        SAFE       = 2
+        COMPLETE   = 3
+    **/
+
     public enum Mode {
         AGGRESSIVE,
         DICTIONARY,
         SAFE,
         COMPLETE
     }
+
+
     
     /** Default constructor **/
     public MinIE(){
@@ -90,7 +101,7 @@ public class MinIE {
      * @param mode - the minimization mode
      * @param d - dictionary of multi-word expressions (for MinIE-D)
      */
-    public MinIE(String sentence, StanfordCoreNLP parser, Mode mode, Dictionary d) {
+    public MinIE(String sentence, StanfordCoreNLP parser, int mode, Dictionary d) {
         // Initializations
         this.propositions = new ObjectArrayList<AnnotatedProposition>();
         this.sentenceSemGraph = new SemanticGraph();
@@ -108,7 +119,7 @@ public class MinIE {
      * NOTE: If mode is MinIE-D, then this will proceed as MinIE-D but with empty dictionary 
      * (i.e. will drop every word that is a candidate)
      */
-    public MinIE(String sentence, StanfordCoreNLP parser, Mode mode) {
+    public MinIE(String sentence, StanfordCoreNLP parser, int mode) {
         this.propositions = new ObjectArrayList<AnnotatedProposition>();
         this.sentenceSemGraph = new SemanticGraph();
         this.sentence = new ObjectArrayList<>();
@@ -125,7 +136,7 @@ public class MinIE {
      * NOTE: If mode is MinIE-D, then this will proceed as MinIE-D but with empty dictionary 
      * (i.e. will drop every word that is a candidate)
      */
-    public MinIE(String sentence, SemanticGraph sg, Mode mode) {
+    public MinIE(String sentence, SemanticGraph sg, int mode) {
         this.propositions = new ObjectArrayList<AnnotatedProposition>();
         this.sentenceSemGraph = new SemanticGraph();
         this.sentence = new ObjectArrayList<>();
@@ -140,7 +151,7 @@ public class MinIE {
      * @param mode - the minimization mode
      * @param d - dictionary of multi-word expressions (for MinIE-D)
      */
-    public MinIE(String sentence, SemanticGraph sg, Mode mode, Dictionary dict) {
+    public MinIE(String sentence, SemanticGraph sg, int mode, Dictionary dict) {
         this.propositions = new ObjectArrayList<AnnotatedProposition>();
         this.sentenceSemGraph = new SemanticGraph();
         this.sentence = new ObjectArrayList<>();
@@ -158,7 +169,7 @@ public class MinIE {
      * @param mode - minimization mode
      * @param d - dictionary (for MinIE-D)
      */
-    public void minimize(String sentence, StanfordCoreNLP parser, Mode mode, Dictionary d) {
+    public void minimize(String sentence, StanfordCoreNLP parser, int mode, Dictionary d) {
         // Run ClausIE first
         ClausIE clausie = new ClausIE();
         clausie.setSemanticGraph(CoreNLPUtils.parse(parser, sentence));
@@ -172,11 +183,11 @@ public class MinIE {
         this.setModality();
         
         // Minimize according to the modes (COMPLETE mode doesn't minimize) 
-        if (mode == Mode.SAFE)
+        if (mode == 2) // previously Mode.SAFE
             this.minimizeSafeMode();
-        else if (mode == Mode.DICTIONARY)
+        else if (mode == 1) // Mode.DICTIONARY
             this.minimizeDictionaryMode(d.words());
-        else if (mode == Mode.AGGRESSIVE)
+        else if (mode == 0) // Mode.AGGRESSIVE
             this.minimizeAggressiveMode();
         
         this.removeDuplicates();
@@ -191,7 +202,7 @@ public class MinIE {
      * @param mode - minimization mode
      * @param d - dictionary (for MinIE-D)
      */
-    public void minimize(String sentence, SemanticGraph sg, Mode mode, Dictionary d) {
+    public void minimize(String sentence, SemanticGraph sg, int mode, Dictionary d) {
         // Run ClausIE first
         ClausIE clausie = new ClausIE();
         clausie.setSemanticGraph(sg);
@@ -205,11 +216,11 @@ public class MinIE {
         this.setModality();
         
         // Minimize according to the modes (COMPLETE mode doesn't minimize) 
-        if (mode == Mode.SAFE)
+        if (mode == 2) // previously Mode.SAFE
             this.minimizeSafeMode();
-        else if (mode == Mode.DICTIONARY)
+        else if (mode == 1) // Mode.DICTIONARY
             this.minimizeDictionaryMode(d.words());
-        else if (mode == Mode.AGGRESSIVE)
+        else if (mode == 0) // Mode.AGGRESSIVE
             this.minimizeAggressiveMode();
         
         this.removeDuplicates();
