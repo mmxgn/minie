@@ -17,8 +17,8 @@ public class Demo {
         // Input sentence
         String sentence = "The Joker believes that the hero Batman was not actually born in foggy Gotham City.";
         
-        // Generate the extractions (With SAFE mode)
-        MinIE minie = new MinIE(sentence, parser, MinIE.Mode.SAFE);
+        // Generate the extractions (With SAFE mode (mode = 2)
+        MinIE minie = new MinIE(sentence, parser, 2);
         
         // Print the extractions
         System.out.println("\nInput sentence: " + sentence);
