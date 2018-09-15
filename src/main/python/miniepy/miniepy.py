@@ -36,19 +36,12 @@ class AnnotatedProposition:
                       for n in range(self.java_obj.triple.size())])
 
 class MinIE:
-    def __init__(self, 
-                 jar_file  = None,
-                 java_home = None,
-                 ):
-        if java_home:
-            os.environ['JAVA_HOME'] = java_home
-            
-        if jar_file:
-            if 'CLASSPATH' in os.environ:
-                os.environ['CLASSPATH'] = "{}:{}".format(jar_file,
-                                                         os.environ['CLASSPATH'])
-            else:
-                os.environ['CLASSPATH'] = jar_file
+    def __init__(self):
+
+                
+        # Import jnius.autoclass after modifying CLASSPATH
+        from jnius import autoclass
+        MinIE.autoclass = autoclass
                      
         CoreNLPUtils = autoclass('de.uni_mannheim.utils.coreNLP.CoreNLPUtils')
             
@@ -82,13 +75,14 @@ class MinIE:
 
 
 if __name__ == "__main__":
+ 
     sentence = 'The Joker believes that the hero Batman was not actually born in foggy Gotham City.'
     print("Original sentence:")
     print('\t{}'.format(sentence))
     # Extract triples
     
     # Get MinIE instance
-    minie = MinIE(jar_file='../../../../target/minie-0.0.1-SNAPSHOT.jar')
+    minie = MinIE()
     
     # Get proposition triples
     triples = [p.triple for p in minie.get_propositions(sentence)]
