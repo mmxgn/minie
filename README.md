@@ -1,5 +1,48 @@
 <img src="https://gkiril.github.io/minie/images/minie_logo.png" align="right" width="150" />
 
+# MinIEpy - Python wrapper for MinIE Open Information Extraction system
+
+I did this fork because I wanted to be able to use MinIE from within python. I made some changes to the original java source code because pyjnius has some bugs regarding accessing java enum types. The main problem was that I could not access the MinIE.Mode enumerator and I had to swap the values with integer values where I needed an interface with python. *DISCLAIMER*: I know little Java, if someone can help me there I would be appreciated. 
+
+## Installation
+
+First compile MinIE and package everything to a single `.jar`:
+
+```
+$ mvn clean compile
+...
+$ mvn assembly:assembly -DdescriptorId=jar-with-dependencies
+...
+```
+
+Secondly, install `pyjnius`. An example for local pip3 installation:
+```
+$ pip3 install pyjnius --user
+```
+
+## Testing
+Change to `src/main/python/tests/minie/`:
+
+```
+$ cd src/main/python/tests/minie/
+```
+
+Run `Demo.py`
+
+```
+$ python3 Demo.py
+```
+
+Note that this assumes that you have environment variable `$JAVA_HOME` set  before running it. If you don't either add `export JAVA_HOME=/path/to/your/jvm` in your `.bashrc` or edit `Demo.py` and uncomment (line 19):
+
+```
+os.environ['JAVA_HOME'] = '/usr/lib/jvm/default'
+```
+## Using MinIE with your python scripts
+
+You can view `src/main/python/tests/minie/Demo.py` for an example to 
+how to get extracted triples. I am planning on implementing a python package that provides a sufficiently good wrapper. For the moment, make sure that your `os.environ['CLASSPATH']` variable points to the minie jar file relative to where you will run your script from (or even better provide an absolute path).
+
 # MinIE - Open Information Extraction system
 
 An Open Information Extraction system, providing useful extractions:
