@@ -6,7 +6,7 @@ I did this fork because I wanted to be able to use MinIE from within python. I m
 
 ## Installation
 
-First compile MinIE and package everything to a single `.jar`:
+First compile MinIE and package everything to a single `.jar` (tested with `java-8-openjdk` and `maven 3.5.4`):
 
 ```
 $ mvn clean compile
