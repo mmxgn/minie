@@ -59,11 +59,13 @@ And install:
 Then you can write a script like the following:
 
 ```
+import os
+os.environ['CLASSPATH'] = "path/to/minie.jar"
+
 from miniepy import *
-jar_file = "path/to/minie.jar"
 
 # Instantiate minie
-minie = MinIE(jar_file)
+minie = MinIE()
 
 # Sentence to extract triples from
 sentence = "The Joker believes that the hero Batman was not actually born in foggy Gotham City."
